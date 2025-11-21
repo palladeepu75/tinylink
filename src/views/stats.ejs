@@ -1,0 +1,9 @@
+<%- include("layout", { body: `
+  <h2>Stats for "${link.code}"</h2>
+
+  <p><strong>URL:</strong> ${link.url}</p>
+  <p><strong>Total clicks:</strong> ${link.clicks}</p>
+  <p><strong>Last clicked:</strong> ${link.last_clicked || "Never"}</p>
+
+  <a href="/">Back</a>
+` }) %>

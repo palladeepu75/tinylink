@@ -1,0 +1,57 @@
+<%- include("layout", { body: `
+  <h2>Dashboard</h2>
+
+  <form id="createForm">
+    <input name="url" placeholder="Long URL" required />
+    <input name="code" placeholder="Custom Code (6-8 chars)" required />
+    <button type="submit">Create</button>
+  </form>
+
+  <table>
+    <tr>
+      <th>Code</th>
+      <th>URL</th>
+      <th>Clicks</th>
+      <th>Last Clicked</th>
+      <th>Actions</th>
+    </tr>
+
+    ${links.map(link => `
+      <tr>
+        <td><a href="/${link.code}">${link.code}</a></td>
+        <td>${link.url}</td>
+        <td>${link.clicks}</td>
+        <td>${link.last_clicked || "-"}</td>
+        <td>
+          <button onclick="deleteLink('${link.code}')">Delete</button>
+          <a href="/code/${link.code}">Stats</a>
+        </td>
+      </tr>
+    `).join('')}
+  </table>
+
+  <script>
+    document.getElementById("createForm").onsubmit = async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target));
+      const res = await fetch("/api/links", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(data)
+      });
+      if (res.ok) location.reload();
+      else alert("Error creating link");
+    };
+
+    async function deleteLink(code) {
+      const res = await fetch("/api/links/" + code, { method:"DELETE" });
+      if (res.ok) location.reload();
+      else alert("Error deleting");
+    }
+  </script>
+` }) %>
+
+
+<!-- URL: https://google.com
+
+Code: google1 -->
